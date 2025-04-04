@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "331392634168",
+    "project_id": "wandergem-a562e",
+    "storage_bucket": "wandergem-a562e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331392634168:android:84961cd5788566483905cd",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6B8DvplEd_zdz5I2NZSussF19MBMIzy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
