@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class LandmarkPage extends StatelessWidget {
+  const LandmarkPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Home Page',
+      child: Text('Landmark Recognition',
           style: TextStyle(fontSize: 24, color: Colors.white)),
     );
   }

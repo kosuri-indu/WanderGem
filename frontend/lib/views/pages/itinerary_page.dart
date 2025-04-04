@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ItineraryPage extends StatelessWidget {
+  const ItineraryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Home Page',
+      child: Text('Itinerary Planner',
           style: TextStyle(fontSize: 24, color: Colors.white)),
     );
   }
