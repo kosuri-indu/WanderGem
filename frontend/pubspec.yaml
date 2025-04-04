@@ -10,6 +10,8 @@ dependencies:
   firebase_core: ^2.30.0
   flutter:
     sdk: flutter
+  http: 1.3.0
+  google_generative_ai: ^0.2.2
   flutter_riverpod: ^2.4.0
   cupertino_icons: ^1.0.8
   http: 1.3.0
@@ -27,7 +29,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/.env
     - assets/background.png
