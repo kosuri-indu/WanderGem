@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/views/pages/home_page.dart';
+import 'package:frontend/views/pages/login_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../data/colors.dart';
 
@@ -11,6 +12,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -26,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => SignInPage()),
         );
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -40,64 +42,128 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  Future<void> signUpWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignInPage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = "An unknown error occurred.";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "Create Account",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  "Sign up to get started",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 30),
-                _buildTextField(Icons.email_outlined, "Email", emailController),
-                const SizedBox(height: 15),
-                _buildTextField(
-                    Icons.lock_outline, "Password", passwordController,
-                    isPassword: true),
-                if (errorMessage != null && errorMessage!.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      errorMessage!,
-                      style: TextStyle(color: Colors.red, fontSize: 14),
-                    ),
-                  ),
-                const SizedBox(height: 10),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Already have an account? Sign In",
-                      style: TextStyle(color: primaryColor, fontSize: 16),
-                    ),
-                  ),
-                ),
-              ],
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              './assets/background.png',
+              fit: BoxFit.cover,
             ),
           ),
-        ),
+          // Foreground content
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 180),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Create Account",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // Adjust text color for visibility
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "Sign up to get started",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70, // Adjust text color for visibility
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    _buildTextField(Icons.email_outlined, "Email", emailController),
+                    const SizedBox(height: 15),
+                    _buildTextField(
+                        Icons.lock_outline, "Password", passwordController,
+                        isPassword: true),
+                    if (errorMessage != null && errorMessage!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          errorMessage!,
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Already have an account? Sign In",
+                          style: TextStyle(color: primaryColor, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: signUpWithGoogle,
+                        icon: Icon(Icons.g_mobiledata),
+                        label: Text("Sign Up with Google"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),

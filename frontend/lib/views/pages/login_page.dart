@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/views/pages/main_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../data/colors.dart';
 import 'signup_page.dart';
@@ -19,10 +20,12 @@ class _SignInScreenState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   String? errorMessage = '';
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp(); 
+    Firebase.initializeApp();
   }
 
   Future<void> signIn() async {
@@ -45,13 +48,43 @@ class _SignInScreenState extends State<SignInPage> {
     }
   }
 
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      print("Google Sign-in successful: ${userCredential.user?.email}");
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MainPage()));
+    } catch (e) {
+      print("Google Sign-in failed: $e");
+      setState(() {
+        errorMessage = "Google Sign-in failed. Please try again.";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/background.png'),
+            image: AssetImage("./assets/background.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -81,6 +114,7 @@ class _SignInScreenState extends State<SignInPage> {
                           Text(
                             "Welcome Back! 👋",
                             style: TextStyle(
+                              color: const Color.fromARGB(255, 0, 109, 119),
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
                             ),
@@ -117,7 +151,22 @@ class _SignInScreenState extends State<SignInPage> {
                               },
                               child: Text(
                                 "Don't have an account? Sign Up",
-                                style: TextStyle(color: primaryColor, fontSize: 16),
+                                style: TextStyle(color: const Color.fromARGB(255, 0, 109, 119), fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: ElevatedButton.icon(
+                              onPressed: signInWithGoogle,
+                              icon: Icon(Icons.login),
+                              label: Text("Sign in with Google"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 219, 68, 55),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
                           ),
