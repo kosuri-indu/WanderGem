@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'views/pages/main_page.dart';
+import 'views/pages/itinerary_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));

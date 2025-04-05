@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "331392634168",
+    "project_id": "wandergem-a562e",
+    "storage_bucket": "wandergem-a562e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331392634168:android:84961cd5788566483905cd",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331392634168-v3de61resb43jo8bcc7t9q0q20dtmpl6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6B8DvplEd_zdz5I2NZSussF19MBMIzy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331392634168-v3de61resb43jo8bcc7t9q0q20dtmpl6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "331392634168-3vli6t75t7pkug09v3n2nlv2249j8qto.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.frontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
