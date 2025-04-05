@@ -6,31 +6,20 @@ import 'package:frontend/views/pages/home_page.dart';
 import 'package:frontend/views/pages/itinerary_page.dart';
 import 'package:frontend/views/pages/landmark_page.dart';
 import 'package:frontend/views/pages/leaderboard_page.dart';
+import 'package:frontend/views/pages/profile_page.dart';
 
 import '../../providers/navigation_provider.dart';
 
-// Dummy Profile Page (replace with actual page if available)
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Profile Page", style: TextStyle(color: Colors.white)),
-    );
-  }
-}
-
 class MainPage extends ConsumerWidget {
-  const MainPage({super.key});
+  MainPage({super.key});
 
-  final List<Widget> _pages = const [
-    HomePage(),
-    ItineraryPage(),
-    AddPage(),
-    LandmarkPage(),
+  final List<Widget> _pages = [
+    const HomePage(),
+    const ItineraryPage(),
+    const AddPage(),
+    const LandmarkPage(),
     LeaderboardPage(),
-    ProfilePage(), // index 5 - Profile page
+    const ProfilePage(), // index 5 - Profile page
   ];
 
   @override

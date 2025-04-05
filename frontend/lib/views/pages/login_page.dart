@@ -41,28 +41,6 @@ class _SignInScreenState extends State<SignInPage> {
     }
   }
 
-  Future<void> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return; // User cancelled
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomePage()));
-    } catch (e) {
-      print(e.toString());
-      setState(() => errorMessage = "Google sign-in failed. Try again.");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -123,11 +101,6 @@ class _SignInScreenState extends State<SignInPage> {
                     ),
                     Expanded(child: Divider(color: Colors.white24)),
                   ]),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: _buildSocialButton("Continue with Google",
-                        "assets/google.png", signInWithGoogle),
-                  ),
                   const Spacer(),
                   Center(
                     child: TextButton(

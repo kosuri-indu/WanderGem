@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -93,13 +94,24 @@ class _AddPageState extends State<AddPage> {
 
   Future<void> _saveEntryToFirestore() async {
     try {
+      // Get current user
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("User not logged in!")),
+        );
+        return;
+      }
+
       await FirebaseFirestore.instance.collection('journalEntries').add({
+        'userId': user.uid, // 👈 changed from 'uid' to 'userId'
         'date': _formattedDate,
         'description': _descriptionController.text.trim(),
         'title': _titleController.text.trim(),
         'rating': _rating,
         'finalNotes': _finalNotesController.text.trim(),
-        'location': _locationController.text.trim(), // 🔥 Added location
+        'location': _locationController.text.trim(),
         'mediaPaths': _mediaFiles.map((file) => file.path).toList(),
         'createdAt': FieldValue.serverTimestamp(),
       });
@@ -114,7 +126,7 @@ class _AddPageState extends State<AddPage> {
         _descriptionController.clear();
         _titleController.clear();
         _finalNotesController.clear();
-        _locationController.clear(); // 🔥 Clear location input
+        _locationController.clear();
         _rating = 0;
         _mediaFiles.clear();
       });
