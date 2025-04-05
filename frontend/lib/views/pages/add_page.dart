@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -21,6 +22,8 @@ class _AddPageState extends State<AddPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _finalNotesController = TextEditingController();
+  final TextEditingController _locationController =
+      TextEditingController(); // Location controller
 
   final primaryColor = Colors.black;
   final secondaryColor = Colors.amber;
@@ -61,25 +64,15 @@ class _AddPageState extends State<AddPage> {
         runSpacing: 10,
         children: [
           for (var file in previewFiles)
-            file.path.endsWith('.mp4')
-                ? Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.black12,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(Icons.videocam, size: 40),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(file.path),
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                File(file.path),
+                height: 80,
+                width: 80,
+                fit: BoxFit.cover,
+              ),
+            ),
           if (_mediaFiles.length > maxToShow)
             Container(
               width: 80,
@@ -98,18 +91,53 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
+  Future<void> _saveEntryToFirestore() async {
+    try {
+      await FirebaseFirestore.instance.collection('journalEntries').add({
+        'date': _formattedDate,
+        'description': _descriptionController.text.trim(),
+        'title': _titleController.text.trim(),
+        'rating': _rating,
+        'finalNotes': _finalNotesController.text.trim(),
+        'location': _locationController.text.trim(), // 🔥 Added location
+        'mediaPaths': _mediaFiles.map((file) => file.path).toList(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Entry saved to Firestore!")),
+      );
+
+      setState(() {
+        _formattedDate = '';
+        _selectedDate = null;
+        _descriptionController.clear();
+        _titleController.clear();
+        _finalNotesController.clear();
+        _locationController.clear(); // 🔥 Clear location input
+        _rating = 0;
+        _mediaFiles.clear();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error saving entry: $e")),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _descriptionController.dispose();
     _titleController.dispose();
     _finalNotesController.dispose();
+    _locationController.dispose(); // Dispose location controller
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // white background
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: SingleChildScrollView(
@@ -124,8 +152,6 @@ class _AddPageState extends State<AddPage> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Date picker
               TextField(
                 readOnly: true,
                 onTap: () => _pickDate(context),
@@ -140,8 +166,16 @@ class _AddPageState extends State<AddPage> {
                 controller: TextEditingController(text: _formattedDate),
               ),
               const SizedBox(height: 12),
-
-              // Description
+              TextField(
+                controller: _locationController,
+                decoration: const InputDecoration(
+                  labelText: "Location",
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+              const SizedBox(height: 12),
               TextField(
                 controller: _descriptionController,
                 maxLines: 4,
@@ -153,26 +187,20 @@ class _AddPageState extends State<AddPage> {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // Upload media
               Align(
                 alignment: Alignment.centerLeft,
                 child: ElevatedButton.icon(
                   onPressed: _pickMedia,
                   icon: Icon(Icons.upload, color: primaryColor),
-                  label: Text("Upload Images/Videos",
+                  label: Text("Upload Images",
                       style: TextStyle(color: primaryColor)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: secondaryColor,
                   ),
                 ),
               ),
-
               if (_mediaFiles.isNotEmpty) _buildMediaPreview(),
-
               const SizedBox(height: 12),
-
-              // Title
               TextField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -183,8 +211,6 @@ class _AddPageState extends State<AddPage> {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // Star rating
               Row(
                 children: [
                   Text("Rate:",
@@ -210,8 +236,6 @@ class _AddPageState extends State<AddPage> {
                 ],
               ),
               const SizedBox(height: 12),
-
-              // Final Notes
               TextField(
                 controller: _finalNotesController,
                 maxLines: 3,
@@ -222,9 +246,7 @@ class _AddPageState extends State<AddPage> {
                   filled: true,
                 ),
               ),
-              const SizedBox(height: 30), // Extra space before save button
-
-              // Save button
+              const SizedBox(height: 30),
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -238,14 +260,10 @@ class _AddPageState extends State<AddPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Entry saved!")),
-                    );
-                  },
+                  onPressed: _saveEntryToFirestore,
                 ),
               ),
-              const SizedBox(height: 100), // Space after button
+              const SizedBox(height: 100),
             ],
           ),
         ),
