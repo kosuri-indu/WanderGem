@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/views/pages/Itinerary_page.dart';
+
 import '../../providers/navigation_provider.dart';
+import 'add_page.dart';
 import 'home_page.dart';
 import 'layover_page.dart';
 import 'add_page.dart';
+
 import 'landmark_page.dart';
 import 'leaderboard_page.dart';
-import 'profile_page.dart';
+import 'login_page.dart';
 
 class MainPage extends ConsumerWidget {
   const MainPage({super.key});
@@ -18,7 +21,7 @@ class MainPage extends ConsumerWidget {
     AddPage(),
     LandmarkPage(),
     LeaderboardPage(),
-    ProfilePage(),
+    SignInPage(),
   ];
 
   @override
