@@ -1,9 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'views/pages/main_page.dart';
-import 'views/pages/itinerary_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frontend/firebase_options.dart';
+import 'package:frontend/views/pages/main_page.dart';
+import 'package:frontend/widget_tree.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:frontend/views/pages/splash_screen.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/.env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -23,7 +34,7 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white70),
         ),
       ),
-      home: const MainPage(),
+      home: const WidgetTree(),
     );
   }
 }
