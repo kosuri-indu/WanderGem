@@ -22,10 +22,20 @@ class _SignInScreenState extends State<SignInPage> {
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  // Initialize Firebase once and wait for it
+  late Future<FirebaseApp> _firebaseInitialization;
+
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp();
+    _firebaseInitialization = Firebase.initializeApp();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   Future<void> signIn() async {
@@ -80,110 +90,135 @@ class _SignInScreenState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("./assets/background.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Welcome Back! 👋",
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 0, 109, 119),
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Sign in to Continue Your Wellness Journey",
-                            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                          ),
-                          const SizedBox(height: 30),
-                          _buildTextField(
-                              Icons.email_outlined, "Email", emailController),
-                          const SizedBox(height: 15),
-                          _buildTextField(
-                              Icons.lock_outline, "Password", passwordController,
-                              isPassword: true),
-                          if (errorMessage != null && errorMessage!.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Text(
-                                errorMessage!,
-                                style: TextStyle(color: Colors.red, fontSize: 14),
+    return FutureBuilder(
+      future: _firebaseInitialization,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text("Error initializing Firebase")),
+          );
+        }
+        return Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("./assets/background.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () => Navigator.pop(context),
                               ),
-                            ),
-                          const SizedBox(height: 10),
-                          Center(
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignUpPage()),
-                                );
-                              },
-                              child: Text(
-                                "Don't have an account? Sign Up",
-                                style: TextStyle(color: const Color.fromARGB(255, 0, 109, 119), fontSize: 16),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Center(
-                            child: ElevatedButton.icon(
-                              onPressed: signInWithGoogle,
-                              icon: Icon(Icons.login),
-                              label: Text("Sign in with Google"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 219, 68, 55),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                              const SizedBox(height: 20),
+                              Text(
+                                "Welcome Back! 👋",
+                                style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 0, 109, 119),
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "Sign in to Continue Your Wellness Journey",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[600]),
+                              ),
+                              const SizedBox(height: 30),
+                              _buildTextField(Icons.email_outlined, "Email",
+                                  emailController),
+                              const SizedBox(height: 15),
+                              _buildTextField(Icons.lock_outline, "Password",
+                                  passwordController,
+                                  isPassword: true),
+                              if (errorMessage != null &&
+                                  errorMessage!.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10),
+                                  child: Text(
+                                    errorMessage!,
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 14),
+                                  ),
+                                ),
+                              const SizedBox(height: 10),
+                              Center(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignUpPage()),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Don't have an account? Sign Up",
+                                    style: TextStyle(
+                                        color: const Color.fromARGB(
+                                            255, 0, 109, 119),
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Center(
+                                child: ElevatedButton.icon(
+                                  onPressed: signInWithGoogle,
+                                  icon: Icon(Icons.login),
+                                  label: Text("Sign in with Google"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 219, 68, 55),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: _buildButton("Sign In", primaryColor, signIn),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: _buildButton("Sign In", primaryColor, signIn),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -200,7 +235,7 @@ class _SignInScreenState extends State<SignInPage> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: hint, 
+        labelText: hint,
         prefixIcon: Icon(icon),
         filled: true,
         fillColor: Colors.grey[200],
