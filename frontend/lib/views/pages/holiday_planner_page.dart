@@ -62,12 +62,7 @@ class _HolidayPlannerPageState extends ConsumerState<HolidayPlannerPage> {
     final tripNotifier = ref.read(holidayPlannerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1B1C1E),
-      appBar: AppBar(
-        title: const Text("AI Trip Planner"),
-        backgroundColor: const Color(0xFF1B1C1E),
-        foregroundColor: Colors.amber,
-      ),
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -176,7 +171,7 @@ class _HolidayPlannerPageState extends ConsumerState<HolidayPlannerPage> {
                   ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 35),
             Center(
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.travel_explore),
@@ -303,6 +298,7 @@ class _HolidayPlannerPageState extends ConsumerState<HolidayPlannerPage> {
                   ),
                 ),
               ),
+            const SizedBox(height: 100),
           ],
         ),
       ),

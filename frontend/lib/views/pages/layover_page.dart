@@ -23,12 +23,7 @@ class _LayoverPageState extends ConsumerState<LayoverPage> {
     final tripNotifier = ref.read(layoverProvider.notifier);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1B1C1E),
-      appBar: AppBar(
-        title: const Text("AI Trip Planner"),
-        backgroundColor: const Color(0xFF1B1C1E),
-        foregroundColor: Colors.amber,
-      ),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -138,7 +133,7 @@ class _LayoverPageState extends ConsumerState<LayoverPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
               Center(
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.travel_explore),
@@ -249,17 +244,8 @@ class _LayoverPageState extends ConsumerState<LayoverPage> {
                       ),
                     );
                   },
-                )
-              else
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      "Enter a location & choose a theme to generate your trip!",
-                      style: TextStyle(color: Colors.white54, fontSize: 16),
-                    ),
-                  ),
                 ),
+              const SizedBox(height: 100),
             ],
           ),
         ),
