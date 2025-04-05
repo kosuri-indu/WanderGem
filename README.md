@@ -4,7 +4,7 @@
 
 ---
 
-## 🌍 What Wandergem Does
+## What Wandergem Does
 
 - **Travel Journal**  
   Capture travel memories through a streamlined journaling experience designed for on-the-go reflections and trip highlights.
@@ -22,46 +22,56 @@
 
 ## Workflow
 
-*A sample user journey:*
-
-```text
+**User Journey:**
+A sample user journey:
 Open App → Discover or Plan Destinations → Log Journals or Itineraries → Explore Places → Earn Credits → View Leaderboard Position
-🛠️ How We Are Building It
-Component	Technology Stack
-Programming Language	Dart (Flutter)
-Planning & Journal UI	Flutter Custom Widgets
-Backend Services	Firebase, Firestore
-Blockchain Integration	Smart Contracts for Leaderboard Credits
-Authentication	Firebase Auth
-UI/UX Design	Figma
-⚙️ Challenges Faced
-Gamification Logic
-Creating a meaningful reward system that encourages exploration without overwhelming users.
 
-Blockchain Integration
-Securely linking user activity with a credit system and maintaining leaderboard transparency.
+---
 
-Planning Experience
-Making the itinerary and holiday planners simple yet useful for all types of travelers.
+## How We Are Building It
 
-Data Structure Optimization
-Designing a backend that supports real-time updates and seamless syncing.
+| **Component**             | **Technology Stack**                        |
+|--------------------------|---------------------------------------------|
+| Programming Language      | Dart (Flutter)                              |
+| UI Components             | Flutter Custom Widgets                      |
+| Backend Services          | Firebase, Firestore                         |
+| Authentication            | Firebase Auth                               |
+| Blockchain Integration    | Smart Contracts for Leaderboard Credits     |
+| UI/UX Design              | Figma                                       |
 
-What's Next for Wandergem?
-Media-Enhanced Journals
-Allow users to attach photos and videos to journal entries.
+---
 
-Collaborative Trip Planning
-Enable multiple users to co-plan and contribute to shared itineraries.
+## Challenges Faced
 
-User-Contributed Destinations
-Let users suggest and vote on hidden gems in their city or travel region.
+- **Gamification Logic**  
+  Creating a meaningful reward system that encourages exploration without overwhelming users.
 
-Personalized Recommendations
-Use past behavior and preferences to suggest journals, places, and plans.
+- **Blockchain Integration**  
+  Securely linking user activity with a credit system and maintaining leaderboard transparency.
 
-👥 Team
-Anbu
-Sriram Namratha
-Kosuri Lakshmi Indu
-Koppol Venkata Sai Sahithi
+- **Planning Experience**  
+  Making the itinerary and holiday planners simple yet useful for all types of travelers.
+
+- **Data Structure Optimization**  
+  Designing a backend that supports real-time updates and seamless syncing.
+
+---
+
+## What's Next for Wandergem?
+
+- **Media-Enhanced Journals**  
+  Allow users to attach photos and videos to journal entries.
+
+- **Collaborative Trip Planning**  
+  Enable multiple users to co-plan and contribute to shared itineraries.
+
+- **User-Contributed Destinations**  
+  Let users suggest and vote on hidden gems in their city or travel region.
+
+- **Personalized Recommendations**  
+  Use past behavior and preferences to suggest journals, places, and plans.
+
+---
+
+## Team
+
