@@ -6,10 +6,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Correct way to set camera center
     final camera = CameraOptions(
-      center: Point(coordinates: Position(-98.0, 39.5)), // USA center roughly
-      zoom: 3.5,
+      center: Point(coordinates: Position(78.9629, 20.5937)),
+      zoom: 3.0, // Zoom out a bit for a broader view
     );
 
     return Scaffold(

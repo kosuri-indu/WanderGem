@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/views/pages/home_page.dart';
-
-import '../../data/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frontend/views/pages/main_page.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -10,8 +8,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String? errorMessage;
@@ -23,19 +21,10 @@ class _SignUpPageState extends State<SignUpPage> {
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
-
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+            context, MaterialPageRoute(builder: (_) => MainPage()));
       } on FirebaseAuthException catch (e) {
-        setState(() {
-          errorMessage = e.message;
-        });
-      } catch (e) {
-        setState(() {
-          errorMessage = "An unknown error occurred.";
-        });
+        setState(() => errorMessage = e.message);
       }
     }
   }
@@ -43,110 +32,95 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      backgroundColor: Colors.black,
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Text(
+                'Create Account',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  "Create Account",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Sign up to get started',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white60),
+              ),
+              const SizedBox(height: 30),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildInputField(Icons.email, 'Email', emailController),
+                    const SizedBox(height: 12),
+                    _buildInputField(Icons.lock, 'Password', passwordController,
+                        isPassword: true),
+                    if (errorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(errorMessage!,
+                            style: TextStyle(color: Colors.redAccent)),
+                      ),
+                    const SizedBox(height: 20),
+                    _buildButton("Sign Up", signUp),
+                  ],
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  "Sign up to get started",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 30),
-                _buildTextField(Icons.email_outlined, "Email", emailController),
-                const SizedBox(height: 15),
-                _buildTextField(
-                    Icons.lock_outline, "Password", passwordController,
-                    isPassword: true),
-                if (errorMessage != null && errorMessage!.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      errorMessage!,
-                      style: TextStyle(color: Colors.red, fontSize: 14),
-                    ),
-                  ),
-                const SizedBox(height: 10),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Already have an account? Sign In",
-                      style: TextStyle(color: primaryColor, fontSize: 16),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Already have an account? Sign In",
+                    style: TextStyle(color: Colors.amber)),
+              ),
+            ],
           ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: _buildButton("Sign Up", primaryColor, signUp),
       ),
     );
   }
 
-  Widget _buildTextField(
+  Widget _buildInputField(
       IconData icon, String hint, TextEditingController controller,
       {bool isPassword = false}) {
     return TextFormField(
       controller: controller,
       obscureText: isPassword,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '$hint cannot be empty';
-        }
-        return null;
-      },
+      style: TextStyle(color: Colors.white),
+      validator: (value) =>
+          (value == null || value.isEmpty) ? '$hint cannot be empty' : null,
       decoration: InputDecoration(
-        labelText: hint, 
-        prefixIcon: Icon(icon),
         hintText: hint,
+        hintStyle: TextStyle(color: Colors.white54),
+        prefixIcon: Icon(icon, color: Colors.amber),
         filled: true,
-        fillColor: Colors.grey[200],
+        fillColor: Colors.white12,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
       ),
     );
   }
 
-  Widget _buildButton(String text, Color color, VoidCallback onPressed) {
+  Widget _buildButton(String text, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: color,
+          backgroundColor: Colors.amber,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        child: Text(text, style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
     );
   }
