@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/data/colors.dart';
+import 'package:frontend/views/pages/home_page.dart';
+import 'package:frontend/views/pages/leaderboard_page.dart';
+import 'package:frontend/views/pages/main_page.dart';
 import 'login_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 3));
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => SignInPage()),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
