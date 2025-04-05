@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -8,121 +11,244 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  final PageController _controller = PageController();
-  int _currentIndex = 0;
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> _mediaFiles = [];
 
-  void _next() {
-    if (_currentIndex < 6) {
-      setState(() => _currentIndex++);
-      _controller.animateToPage(_currentIndex,
-          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-    } else {
-      // Handle completion
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Flashcard journey completed!")),
-      );
+  DateTime? _selectedDate;
+  String _formattedDate = '';
+  double _rating = 0;
+
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _finalNotesController = TextEditingController();
+
+  final primaryColor = Colors.black;
+  final secondaryColor = Colors.amber;
+
+  Future<void> _pickDate(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+      });
     }
+  }
+
+  Future<void> _pickMedia() async {
+    final List<XFile> files = await _picker.pickMultiImage();
+    if (files.isNotEmpty) {
+      setState(() {
+        _mediaFiles.addAll(files);
+      });
+    }
+  }
+
+  Widget _buildMediaPreview() {
+    final maxToShow = 7;
+    final previewFiles = _mediaFiles.take(maxToShow).toList();
+    final remaining = _mediaFiles.length - maxToShow;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          for (var file in previewFiles)
+            file.path.endsWith('.mp4')
+                ? Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.videocam, size: 40),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      File(file.path),
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+          if (_mediaFiles.length > maxToShow)
+            Container(
+              width: 80,
+              height: 80,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text("+$remaining",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: primaryColor)),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    _titleController.dispose();
+    _finalNotesController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text("Create a Flashcard Journey ✨",
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _controller,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 7,
-                itemBuilder: (context, index) => _buildFlashcard(index),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _next,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.amberAccent.shade100.withOpacity(0.9),
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text("Next",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      backgroundColor: Colors.white, // white background
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(
+                "Create Your Entry",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
-  }
+              const SizedBox(height: 20),
 
-  Widget _buildFlashcard(int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFFFF7AE), Color(0xFFFEEBCB)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+              // Date picker
+              TextField(
+                readOnly: true,
+                onTap: () => _pickDate(context),
+                decoration: InputDecoration(
+                  labelText: "Select Date",
+                  hintText: "2025-04-05",
+                  border: const OutlineInputBorder(),
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+                controller: TextEditingController(text: _formattedDate),
+              ),
+              const SizedBox(height: 12),
+
+              // Description
+              TextField(
+                controller: _descriptionController,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  labelText: "Journal / Description",
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Upload media
+              Align(
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton.icon(
+                  onPressed: _pickMedia,
+                  icon: Icon(Icons.upload, color: primaryColor),
+                  label: Text("Upload Images/Videos",
+                      style: TextStyle(color: primaryColor)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: secondaryColor,
+                  ),
+                ),
+              ),
+
+              if (_mediaFiles.isNotEmpty) _buildMediaPreview(),
+
+              const SizedBox(height: 12),
+
+              // Title
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: "Title",
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Star rating
+              Row(
+                children: [
+                  Text("Rate:",
+                      style: TextStyle(fontSize: 16, color: primaryColor)),
+                  const SizedBox(width: 12),
+                  Row(
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        icon: Icon(
+                          index < _rating
+                              ? Icons.star
+                              : Icons.star_border_outlined,
+                          color: secondaryColor,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _rating = (index + 1).toDouble();
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Final Notes
+              TextField(
+                controller: _finalNotesController,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: "Final Notes / Review",
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+              const SizedBox(height: 30), // Extra space before save button
+
+              // Save button
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.save),
+                  label: const Text("Save Entry"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: secondaryColor,
+                    foregroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Entry saved!")),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 100), // Space after button
+            ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.amberAccent.withOpacity(0.5),
-              blurRadius: 30,
-              spreadRadius: 5,
-              offset: const Offset(0, 10),
-            ),
-          ],
         ),
-        padding: const EdgeInsets.all(24),
-        child: SingleChildScrollView(
-          child: _buildFlashcardContent(index),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFlashcardContent(int index) {
-    final List<String> prompts = [
-      "Welcome to your creative flashcard journey 🌟",
-      "Ready to begin? Pick a date 📅",
-      "Enter your core text for the flashcard ✍️",
-      "Choose a beautiful thumbnail 🖼️",
-      "Add some images or videos 🎥",
-      "Give your creation a catchy title 📝",
-      "You're all set! Thank you 🙏"
-    ];
-
-    return Center(
-      child: Text(
-        prompts[index],
-        style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-          color: Colors.black87,
-        ),
-        textAlign: TextAlign.center,
       ),
     );
   }
