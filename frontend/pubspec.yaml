@@ -30,3 +30,7 @@ flutter:
   assets:
     - assets/.env
     - assets/background.png
+    - assets/plane.png
+    - assets/bus.png
+    - assets/image.png
+    - assets/reward.png
