@@ -25,10 +25,18 @@ class _SignInScreenState extends State<SignInPage> {
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => MainPage()));
+
+        // Check if the widget is still mounted before navigating
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => MainPage()),
+          );
+        }
       } on FirebaseAuthException catch (e) {
-        setState(() => errorMessage = e.message ?? 'Login failed');
+        if (mounted) {
+          setState(() => errorMessage = e.message ?? 'Login failed');
+        }
       }
     }
   }
@@ -197,7 +205,7 @@ class _SignInScreenState extends State<SignInPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(iconPath, height: 24),
+            // Image.asset(iconPath, height: 24),
             const SizedBox(width: 12),
             Text(text, style: TextStyle(color: Colors.white)),
             const SizedBox(width: 40),
