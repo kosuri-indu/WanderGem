@@ -74,7 +74,7 @@ class JournalListPage extends StatelessWidget {
                   );
                 } else {
                   imageWidget = const Text(
-                    '🖼️ Image not available',
+                    'Image not available',
                     style: TextStyle(color: Colors.white),
                   );
                 }
@@ -113,10 +113,10 @@ class JournalListPage extends StatelessWidget {
                       imageWidget,
                       const SizedBox(height: 16),
                     ],
-                    _flashCardField("📅 Date", date),
-                    _flashCardField("⭐ Rating", rating),
-                    _flashCardField("📖 Description", description),
-                    _flashCardField("🗒️ Final Notes", finalNotes),
+                    _flashCardField("Date", date),
+                    _flashCardField("Rating", rating),
+                    _flashCardField("Description", description),
+                    _flashCardField("Final Notes", finalNotes),
                   ],
                 ),
               );
