@@ -1,4 +1,4 @@
-# WanderGem: Your Smart Travel Companion
+# WanderGem: Make every moment Memorable
 
 Wandergem is a smart travel companion app that helps users discover unique places, plan personalized journeys, and document memories—all in one place. By combining interactive exploration, flexible planning tools, and a gamified credit system powered by blockchain, Wandergem enhances the travel experience with a focus on engagement, simplicity, and meaningful discovery.
 
