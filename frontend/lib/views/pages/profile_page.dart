@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/views/pages/all_journal_page.dart';
+import 'package:frontend/views/pages/journal_list_page.dart'; // Add your import path
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -53,7 +55,7 @@ class ProfilePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _InfoCard("56", "Total Places\nTraveled"),
+                  _InfoCard("5", "Total Places\nTraveled"),
                   _TransportCard(),
                   _RewardCard(),
                 ],
@@ -68,7 +70,16 @@ class ProfilePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _MemoryCard("My Journals", Icons.book),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AllJournalPage()),
+                    );
+                  },
+                  child: _MemoryCard("My Journals", Icons.book),
+                ),
                 _MemoryCard("My Itineraries", Icons.checklist),
               ],
             ),
