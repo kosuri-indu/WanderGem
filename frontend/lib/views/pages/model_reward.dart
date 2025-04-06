@@ -26,90 +26,108 @@ class _ModelRewardsState extends State<ModelRewards> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        MapWidget(
-          cameraOptions: CameraOptions(
-            center: Point(coordinates: position),
-            zoom: 18.5,
-            bearing: 98.82,
-            pitch: 85,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rewards'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.amber,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.card_giftcard),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Claiming reward...')),
+              );
+            },
           ),
-          key: const ValueKey<String>('mapWidget'),
-          onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoaded,
-        ),
-        Positioned(
-          top: 40,
-          left: 16,
-          right: 16,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+        ],
+      ),
+      body: Stack(
+        children: [
+          MapWidget(
+            cameraOptions: CameraOptions(
+              center: Point(coordinates: position),
+              zoom: 18.5,
+              bearing: 98.82,
+              pitch: 85,
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter wallet address',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 12),
+            key: const ValueKey<String>('mapWidget'),
+            onMapCreated: _onMapCreated,
+            onStyleLoadedListener: _onStyleLoaded,
+          ),
+          Positioned(
+            top: 40,
+            left: 16,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter wallet address',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 12),
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () async {
-                    final value = _controller.text;
-                    if (value.length == 66) { // Standard Aptos address length
-                      try {
-                        final response = await http.post(
-                          Uri.parse('/api/claim-reward'),
-                          headers: {'Content-Type': 'application/json'},
-                          body: json.encode({
-                            'walletAddress': value,
-                            'landmarkId': '1' // Replace with actual landmark ID
-                          }),
-                        );
-
-                        if (response.statusCode == 200) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Reward claimed successfully!')),
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () async {
+                      final value = _controller.text;
+                      if (value.length == 66) { // Standard Aptos address length
+                        try {
+                          final response = await http.post(
+                            Uri.parse('/api/claim-reward'),
+                            headers: {'Content-Type': 'application/json'},
+                            body: json.encode({
+                              'walletAddress': value,
+                              'landmarkId': '1' // Replace with actual landmark ID
+                            }),
                           );
-                          Navigator.pushNamed(context, '/leaderboard');
-                        } else {
+
+                          if (response.statusCode == 200) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Reward claimed successfully!')),
+                            );
+                            Navigator.pushNamed(context, '/leaderboard');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to claim reward')),
+                            );
+                          }
+                        } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to claim reward')),
+                            SnackBar(content: Text('Error: ${e.toString()}')),
                           );
                         }
-                      } catch (e) {
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error: ${e.toString()}')),
+                          SnackBar(content: Text('Invalid wallet address')),
                         );
                       }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Invalid wallet address')),
-                      );
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

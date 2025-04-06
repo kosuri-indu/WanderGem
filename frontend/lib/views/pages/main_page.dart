@@ -7,6 +7,7 @@ import 'package:frontend/views/pages/itinerary_page.dart';
 import 'package:frontend/views/pages/landmark_page.dart';
 import 'package:frontend/views/pages/leaderboard_page.dart';
 import 'package:frontend/views/pages/profile_page.dart';
+import 'package:frontend/views/pages/model_reward.dart';
 
 import '../../providers/navigation_provider.dart';
 

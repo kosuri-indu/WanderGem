@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/views/pages/model_reward.dart'; // Add this import
 
 class LeaderboardPage extends StatelessWidget {
   final List<Map<String, dynamic>> topUsers = [
@@ -44,54 +45,90 @@ class LeaderboardPage extends StatelessWidget {
         foregroundColor: secondaryColor,
         elevation: 0,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.card_giftcard, color: secondaryColor),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ModelRewards()),
+              );
+            },
+          ),
+        ],
       ),
-      body: ListView.separated(
-        itemCount: topUsers.length,
-        padding: const EdgeInsets.all(16),
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          final user = topUsers[index];
-          final rank = index + 1;
+      body: Stack(
+        children: [
+          ListView.separated(
+            itemCount: topUsers.length,
+            padding: const EdgeInsets.all(16),
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final user = topUsers[index];
+              final rank = index + 1;
 
-          return Container(
-            decoration: BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: [
-                BoxShadow(
-                  color: secondaryColor.withOpacity(0.4),
-                  blurRadius: 6,
-                  offset: const Offset(0, 4),
+              return Container(
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: secondaryColor.withOpacity(0.4),
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              leading: CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 25,
-                child: _buildMedalIcon(rank),
-              ),
-              title: Text(
-                user['name'],
-                style: const TextStyle(
+                child: ListTile(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    radius: 25,
+                    child: _buildMedalIcon(rank),
+                  ),
+                  title: Text(
+                    user['name'],
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                    ),
+                  ),
+                  trailing: Text(
+                    '${user['score']} pts',
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton.extended(
+              backgroundColor: secondaryColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ModelRewards()),
+                );
+              },
+              icon: const Icon(Icons.redeem, color: Colors.black),
+              label: const Text(
+                'Rewards',
+                style: TextStyle(
                   color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
-              trailing: Text(
-                '${user['score']} pts',
-                style: const TextStyle(
-                  color: Colors.black87,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
