@@ -31,7 +31,7 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 | Backend Services          | Firebase, Firestore                         |
 | API Integration        | Gemini LLM (1.5 Flash)                    |
 | Authentication            | Firebase Auth                               |
-| Blockchain Integration    | Aptos for Leaderboard Credits     |
+| Blockchain Integration    | Aptos for Leaderboard Credits (Testnet)     |
 | UI/UX Design              | Figma                                       |
 
 ## Challenges Faced
