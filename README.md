@@ -2,8 +2,6 @@
 
 **Wandergem** is a smart travel companion app that helps users discover unique places, plan personalized journeys, and document memories—all in one place. By combining interactive exploration, flexible planning tools, and a gamified credit system powered by blockchain, Wandergem enhances the travel experience with a focus on engagement, simplicity, and meaningful discovery.
 
----
-
 ## What Wandergem Does
 
 - **Travel Journal**  
@@ -18,15 +16,11 @@
 - **Leaderboard with Blockchain Integration**  
   Earn exploration credits through meaningful travel activities and track your progress on a secure, tamper-proof leaderboard powered by blockchain.
 
----
-
 ## Workflow
 
 **User Journey:**
 A sample user journey:
 Open App → Discover or Plan Destinations → Log Journals or Itineraries → Explore Places → Earn Credits → View Leaderboard Position
-
----
 
 ## How We Are Building It
 
@@ -39,8 +33,6 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 | Blockchain Integration    | Smart Contracts for Leaderboard Credits     |
 | UI/UX Design              | Figma                                       |
 
----
-
 ## Challenges Faced
 
 - **Gamification Logic**  
@@ -51,11 +43,6 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 
 - **Planning Experience**  
   Making the itinerary and holiday planners simple yet useful for all types of travelers.
-
-- **Data Structure Optimization**  
-  Designing a backend that supports real-time updates and seamless syncing.
-
----
 
 ## What's Next for Wandergem?
 
@@ -70,8 +57,6 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 
 - **Personalized Recommendations**  
   Use past behavior and preferences to suggest journals, places, and plans.
-
----
 
 ## Team
 
