@@ -28,7 +28,7 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 |--------------------------|---------------------------------------------|
 | Programming Language      | Dart (Flutter)                              |
 | UI Components             | Flutter Custom Widgets                      |
-| Backend Services          | Firebase, Firestore                         |
+| Backend Services          | Firebase, Firestore, Express, Move          |
 | API Integration        | Gemini LLM (1.5 Flash)                    |
 | Authentication            | Firebase Auth                               |
 | Blockchain Integration    | Aptos for Leaderboard Credits (Testnet)     |
