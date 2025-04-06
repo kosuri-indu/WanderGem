@@ -1,2 +1,6 @@
 .vscode
 mapbox_access_token.xml
+.env
+firebase.json
+firebase_options.dart
+./node_modules
