@@ -1,8 +1,6 @@
-# Wandergem: Your Smart Travel Companion
+# WanderGem: Your Smart Travel Companion
 
-**Wandergem** is a smart travel companion app that helps users discover unique places, plan personalized journeys, and document memories—all in one place. By combining interactive exploration, flexible planning tools, and a gamified credit system powered by blockchain, Wandergem enhances the travel experience with a focus on engagement, simplicity, and meaningful discovery.
-
----
+Wandergem is a smart travel companion app that helps users discover unique places, plan personalized journeys, and document memories—all in one place. By combining interactive exploration, flexible planning tools, and a gamified credit system powered by blockchain, Wandergem enhances the travel experience with a focus on engagement, simplicity, and meaningful discovery.
 
 ## What Wandergem Does
 
@@ -18,15 +16,11 @@
 - **Leaderboard with Blockchain Integration**  
   Earn exploration credits through meaningful travel activities and track your progress on a secure, tamper-proof leaderboard powered by blockchain.
 
----
-
 ## Workflow
 
 **User Journey:**
 A sample user journey:
 Open App → Discover or Plan Destinations → Log Journals or Itineraries → Explore Places → Earn Credits → View Leaderboard Position
-
----
 
 ## How We Are Building It
 
@@ -35,11 +29,10 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 | Programming Language      | Dart (Flutter)                              |
 | UI Components             | Flutter Custom Widgets                      |
 | Backend Services          | Firebase, Firestore                         |
+| API Integration        | Gemini LLM (1.5 Flash)                    |
 | Authentication            | Firebase Auth                               |
-| Blockchain Integration    | Smart Contracts for Leaderboard Credits     |
+| Blockchain Integration    | Aptos for Leaderboard Credits     |
 | UI/UX Design              | Figma                                       |
-
----
 
 ## Challenges Faced
 
@@ -51,11 +44,6 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 
 - **Planning Experience**  
   Making the itinerary and holiday planners simple yet useful for all types of travelers.
-
-- **Data Structure Optimization**  
-  Designing a backend that supports real-time updates and seamless syncing.
-
----
 
 ## What's Next for Wandergem?
 
@@ -71,7 +59,12 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
 - **Personalized Recommendations**  
   Use past behavior and preferences to suggest journals, places, and plans.
 
----
-
 ## Team
+
+| **Name**             |  
+|----------------------|
+| Anbu Srinivasan  |  
+| Kosuri Lakshmi Indu  |  
+| Namratha Sriram      |  
+| Koppol Venkata Sai Sahithi        |  
 
