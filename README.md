@@ -1,6 +1,6 @@
-# Wandergem: Your Smart Travel Companion
+# WanderGem: Your Smart Travel Companion
 
-**Wandergem** is a smart travel companion app that helps users discover unique places, plan personalized journeys, and document memories—all in one place. By combining interactive exploration, flexible planning tools, and a gamified credit system powered by blockchain, Wandergem enhances the travel experience with a focus on engagement, simplicity, and meaningful discovery.
+Wandergem is a smart travel companion app that helps users discover unique places, plan personalized journeys, and document memories—all in one place. By combining interactive exploration, flexible planning tools, and a gamified credit system powered by blockchain, Wandergem enhances the travel experience with a focus on engagement, simplicity, and meaningful discovery.
 
 ## What Wandergem Does
 
@@ -59,4 +59,11 @@ Open App → Discover or Plan Destinations → Log Journals or Itineraries → E
   Use past behavior and preferences to suggest journals, places, and plans.
 
 ## Team
+
+| **Name**             |  
+|----------------------|
+| Anbu Srinivasan  |  
+| Kosuri Lakshmi Indu  |  
+| Namratha Sriram      |  
+| Koppol Venkata Sai Sahithi        |  
 
